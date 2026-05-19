@@ -1,0 +1,69 @@
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Environment / secrets
+.env
+.env.*
+*.key
+*.pem
+
+# IDE / editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# ML / data artifacts
+*.h5
+*.pkl
+*.pickle
+*.joblib
+*.pt
+*.pth
+*.onnx
+*.tflite
+models/
+checkpoints/
+data/
+datasets/
+
+# OS
+desktop.ini
