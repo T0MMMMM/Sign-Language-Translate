@@ -65,5 +65,9 @@ checkpoints/
 data/
 datasets/
 
+# Web models are committed (served by Vercel)
+!web/models/
+!web/models/*
+
 # OS
 desktop.ini
