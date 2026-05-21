@@ -7,7 +7,6 @@ mp_draw = mp.solutions.drawing_utils
 
 
 def create_hand_detector():
-    """Crée le détecteur de mains MediaPipe."""
     return mp_hands.Hands(
         static_image_mode=False,
         max_num_hands=1,
@@ -21,15 +20,14 @@ def extract_landmarks(hand_landmarks):
     coords = np.array(
         [[lm.x, lm.y, lm.z] for lm in hand_landmarks.landmark]
     )
-    coords -= coords[0]                      # recentrer sur le poignet
+    coords -= coords[0]
     max_dist = np.max(np.linalg.norm(coords, axis=1))
     if max_dist > 0:
-        coords /= max_dist                   # mettre à l'échelle
+        coords /= max_dist
     return coords.flatten()
 
 
 def draw_landmarks(image, hand_landmarks):
-    """Dessine les points et connexions de la main."""
     mp_draw.draw_landmarks(
         image, hand_landmarks, mp_hands.HAND_CONNECTIONS
     )
