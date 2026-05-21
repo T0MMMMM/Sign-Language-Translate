@@ -15,6 +15,7 @@ dist/
 build/
 .eggs/
 .Python
+.pytest_cache
 
 # Byte-compiled / optimized / DLL files
 *.pyc
@@ -71,3 +72,5 @@ datasets/
 
 # OS
 desktop.ini
+
+.claude

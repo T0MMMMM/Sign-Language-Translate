@@ -12,7 +12,7 @@ from hand_utils import create_hand_detector, extract_landmarks
 
 DATA_PATH = "data/landmarks.csv"
 MODEL_PATH = "models/asl_model.pkl"
-SAMPLES_PER_LETTER = 200  # augmenter pour plus de précision (dataset = 3000/lettre)
+SAMPLES_PER_LETTER = 200
 
 
 def download_dataset():
