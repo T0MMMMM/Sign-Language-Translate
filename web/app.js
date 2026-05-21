@@ -84,8 +84,8 @@ async function main() {
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
       const lms = results.multiHandLandmarks[0];
 
-      drawConnectors(ctx, lms, HAND_CONNECTIONS, { color: 'rgba(255,255,255,0.6)', lineWidth: 2 });
-      drawLandmarks(ctx, lms, { color: '#ffffff', radius: 3, fillColor: 'rgba(255,255,255,0.4)' });
+      drawConnectors(ctx, lms, HAND_CONNECTIONS, { color: '#cc0000', lineWidth: 2 });
+      drawLandmarks(ctx, lms, { color: '#ff0000', radius: 4, fillColor: '#ff4444' });
 
       const letter = await predict(lms);
       if (letter) predictionEl.textContent = letter;

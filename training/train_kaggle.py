@@ -7,8 +7,11 @@ import pickle
 import numpy as np
 import pandas as pd
 import kagglehub
+import mediapipe as mp
 from sklearn.ensemble import RandomForestClassifier
-from hand_utils import create_hand_detector, extract_landmarks
+from hand_utils import extract_landmarks
+
+mp_hands = mp.solutions.hands
 
 DATA_PATH = "data/landmarks.csv"
 MODEL_PATH = "models/asl_model.pkl"
@@ -23,7 +26,12 @@ def download_dataset():
 
 
 def extract_from_dataset(dataset_path):
-    detector = create_hand_detector()
+    # static_image_mode=True est indispensable pour les images fixes du dataset
+    detector = mp_hands.Hands(
+        static_image_mode=True,
+        max_num_hands=1,
+        min_detection_confidence=0.5,
+    )
     os.makedirs("data", exist_ok=True)
 
     # Le dataset a la structure : asl_alphabet_train/asl_alphabet_train/<LETTRE>/img.jpg
