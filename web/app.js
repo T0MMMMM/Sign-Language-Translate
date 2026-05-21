@@ -50,7 +50,14 @@ async function main() {
 
   setStatus('Accès caméra...');
 
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  } catch (err) {
+    setStatus('Autorisez l\'accès à la caméra dans votre navigateur.');
+    predictionEl.textContent = '!';
+    return;
+  }
   mainVideo.srcObject = stream;
   bgVideo.srcObject = stream;
 

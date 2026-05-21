@@ -29,8 +29,9 @@ def extract_from_dataset(dataset_path):
     # Le dataset a la structure : asl_alphabet_train/asl_alphabet_train/<LETTRE>/img.jpg
     train_root = os.path.join(dataset_path, "asl_alphabet_train", "asl_alphabet_train")
     if not os.path.isdir(train_root):
-        # Essayer le chemin direct si la structure diffère
         train_root = dataset_path
+    if not os.path.isdir(train_root):
+        raise FileNotFoundError(f"Dataset structure not found at: {dataset_path}")
 
     rows = []
     letters = sorted([d for d in os.listdir(train_root)
@@ -63,7 +64,7 @@ def extract_from_dataset(dataset_path):
     return rows
 
 
-def train_model(rows=None):
+def train_model():
     df = pd.read_csv(DATA_PATH, header=None)
     X = df.iloc[:, 1:].values.astype(float)
     y = df.iloc[:, 0].values

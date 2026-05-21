@@ -3,7 +3,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import cv2
 import csv
-import os
 import pickle
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
