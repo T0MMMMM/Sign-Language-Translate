@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Language Translate</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+</head>
+<body>
+
+  <!-- Fond flou (même flux caméra) -->
+  <video id="bg-video" autoplay playsinline muted></video>
+
+  <div class="container">
+    <!-- Bouton langue haut gauche -->
+    <button class="lang-btn" aria-label="Changer de langue">
+      <span class="lang active">ASL</span>
+      <span class="divider">|</span>
+      <span class="lang disabled" title="Bientôt disponible">LSF</span>
+    </button>
+
+    <!-- Caméra centrale -->
+    <div class="camera-wrapper">
+      <video id="main-video" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+      <div id="status-overlay">Chargement...</div>
+    </div>
+
+    <!-- Texte prédiction -->
+    <p id="prediction">--</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
