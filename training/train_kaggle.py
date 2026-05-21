@@ -15,7 +15,7 @@ mp_hands = mp.solutions.hands
 
 DATA_PATH = "data/landmarks.csv"
 MODEL_PATH = "models/asl_model.pkl"
-SAMPLES_PER_LETTER = 200
+SAMPLES_PER_LETTER = 300
 
 
 def download_dataset():
