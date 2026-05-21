@@ -1,13 +1,11 @@
 import numpy as np
+import mediapipe as mp
 
-
-def _get_mp():
-    import mediapipe as mp
-    return mp.solutions.hands, mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
+mp_draw = mp.solutions.drawing_utils
 
 
 def create_hand_detector():
-    mp_hands, _ = _get_mp()
     return mp_hands.Hands(
         static_image_mode=False,
         max_num_hands=1,
@@ -29,8 +27,6 @@ def extract_landmarks(hand_landmarks):
 
 
 def draw_landmarks(image, hand_landmarks):
-    import cv2  # noqa: F401
-    mp_hands, mp_draw = _get_mp()
     mp_draw.draw_landmarks(
         image, hand_landmarks, mp_hands.HAND_CONNECTIONS
     )
