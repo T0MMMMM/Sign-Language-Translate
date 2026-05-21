@@ -1,9 +1,9 @@
-// ONNX tensor names (verified from export)
 const ONNX_INPUT = 'float_input';
 const ONNX_PROBS = 'probabilities';
 
 let session = null;
 let labels = [];
+let predicting = false;
 
 // Normalization identical to hand_utils.py extract_landmarks()
 function extractLandmarks(landmarks) {
@@ -41,7 +41,6 @@ async function main() {
 
   setStatus('Chargement du modèle...');
 
-  // Load labels and ONNX model in parallel
   const [labelsRes] = await Promise.all([
     fetch('./models/labels.json'),
     ort.InferenceSession.create('./models/asl_model.onnx').then(s => { session = s; })
@@ -52,7 +51,9 @@ async function main() {
 
   let stream;
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
   } catch (err) {
     setStatus('Autorisez l\'accès à la caméra dans votre navigateur.');
     predictionEl.textContent = '!';
@@ -72,32 +73,40 @@ async function main() {
   hands.setOptions({
     maxNumHands: 1,
     modelComplexity: 1,
-    minDetectionConfidence: 0.7,
-    minTrackingConfidence: 0.7
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
   });
 
-  hands.onResults(async results => {
-    overlay.width = mainVideo.videoWidth;
-    overlay.height = mainVideo.videoHeight;
+  // Synchronous results handler — never awaits, never blocks the next frame
+  hands.onResults(results => {
+    // Only resize canvas when video dimensions actually change (expensive)
+    if (overlay.width !== mainVideo.videoWidth) overlay.width = mainVideo.videoWidth;
+    if (overlay.height !== mainVideo.videoHeight) overlay.height = mainVideo.videoHeight;
     ctx.clearRect(0, 0, overlay.width, overlay.height);
 
     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
       const lms = results.multiHandLandmarks[0];
 
-      drawConnectors(ctx, lms, HAND_CONNECTIONS, { color: '#cc0000', lineWidth: 2 });
-      drawLandmarks(ctx, lms, { color: '#ff0000', radius: 4, fillColor: '#ff4444' });
+      drawConnectors(ctx, lms, HAND_CONNECTIONS, { color: '#ffffff', lineWidth: 2 });
+      drawLandmarks(ctx, lms, { color: '#fc1f1f', radius: 4, fillColor: '#ff4444' });
 
-      const letter = await predict(lms);
-      if (letter) predictionEl.textContent = letter;
+      // Fire prediction without blocking drawing — updates whenever ONNX is ready
+      if (!predicting) {
+        predicting = true;
+        predict(lms).then(letter => {
+          if (letter) predictionEl.textContent = letter;
+          predicting = false;
+        });
+      }
     } else {
-      predictionEl.textContent = '--';
+      predictionEl.textContent = '-';
     }
   });
 
   const camera = new Camera(mainVideo, {
     onFrame: async () => { await hands.send({ image: mainVideo }); },
-    width: 640,
-    height: 480
+    width: 1280,
+    height: 720
   });
 
   camera.start();
